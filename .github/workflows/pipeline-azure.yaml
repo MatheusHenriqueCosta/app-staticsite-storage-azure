@@ -5,6 +5,12 @@ on:
     branches:
     - main
 
+    env:
+      ARM_CLIENT_ID      : ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET  : ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID      : ${{ secrets.ARM_TENANT_ID }}
+
 jobs:
 
   tf-run:
@@ -16,18 +22,13 @@ jobs:
     - name: Step 01 - Terraform Setup
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.6.1
+        terraform_version: 1.9.7
 
     - name: Step 02 - Terraform Version
       run : terraform --version
 
     - name: Step 03 - CheckOut GitHub Repo
-      uses: actions/checkout@v3
-
-    - name: Step 04 - Authenticate with Azure
-      uses: azure/login@v1
-      with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+      uses: actions/checkout@v4
 
     - name: Step 05 - Terraform Init
       run : terraform -chdir=./terraform init -input=false
